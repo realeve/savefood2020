@@ -4,6 +4,9 @@ import { connect } from 'dva';
 import ReactFullpage from '@fullpage/react-fullpage';
 import classnames from 'classnames';
 import 'animate.css';
+import { TextareaItem, Button, Toast } from 'antd-mobile';
+
+import * as db from '@/utils/db';
 
 const slogans = [
   ['珍惜粮食', '粒粒不易', '不倒不弃'],
@@ -19,9 +22,16 @@ const slogans = [
 
 const OFFSET_PAGES = 3;
 
-const Fullpage = () => {
+const Fullpage = ({ user }) => {
   const [page, setPage] = useState(0);
-
+  const [comment, setComment] = useState<undefined | string>(undefined);
+  const submit = async () => {
+    let success = await db.addCbpcSavefood2020({ ...user, comment });
+    Toast[success ? 'success' : 'fail']('留言' + (success ? '成功' : '失败,请稍后重试'), 2);
+    if (success) {
+      setComment('');
+    }
+  };
   return (
     <>
       <ReactFullpage
@@ -122,6 +132,26 @@ const Fullpage = () => {
                     style={{ paddingTop: 15 }}
                   >
                     我承诺
+                  </div>
+                  <div className={styles.action}>
+                    <TextareaItem
+                      rows={2}
+                      placeholder="点击在此留言"
+                      count={24}
+                      value={comment}
+                      onChange={(e) => {
+                        setComment(e);
+                      }}
+                    />
+                    <Button
+                      disabled={!comment || comment.trim().length === 0}
+                      type="primary"
+                      inline
+                      style={{ marginTop: 10 }}
+                      onClick={submit}
+                    >
+                      提交我的承诺
+                    </Button>
                   </div>
                 </div>
               </div>

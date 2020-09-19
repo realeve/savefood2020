@@ -7,8 +7,7 @@ interface IPropsLayout {
 }
 const BasicLayout: (props: IPropsLayout) => React.ReactElement = (props: IPropsLayout) => (
   <div className={styles.app}>
-    <div className={styles.container}>{props.children}</div>
-    <footer className={styles.footer}></footer>
+    <div className={styles.container}>{props.children}</div> 
   </div>
 );
 export default BasicLayout;

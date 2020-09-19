@@ -5,17 +5,7 @@ const namespace = 'common';
 export default {
   namespace,
   state: {
-    logInfo: {
-      uid: 0,
-      provider: 0,
-    },
-    hasSubmitted: 0,
-    result: {
-      title: '提交成功',
-      status: 'success',
-      message: '感谢您的参与',
-    },
-    status: 0,
+    user: {},
   },
   reducers: {
     setStore,
@@ -45,7 +35,7 @@ export default {
   subscriptions: {
     async setup({ dispatch, history }) {
       // 不获取个人信息
-      // await dispatch({ type: 'getWxUser' });
+      await dispatch({ type: 'getWxUser' });
       await weixin.init(false);
     },
   },

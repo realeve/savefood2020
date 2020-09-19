@@ -56,11 +56,20 @@
   }
   .cbpc {
     width: 80%;
-    margin: 0 auto;
+    margin: 10px auto 0 auto;
     background-color: #fff500;
     color: #0071b7;
     padding: 5px 0;
     text-align: center;
     font-size: 45px;
+  }
+  .action {
+    width: 80%;
+    margin: 20px auto 0 auto;
+    :global {
+      .am-list-item {
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+    }
   }
 }
