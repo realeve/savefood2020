@@ -12,6 +12,10 @@ export default {
   },
   effects: {
     *getWxUser(_, { put, call, select }) {
+      // 大屏显示页面不加载
+      if (window.location.href.includes('led')) {
+        return;
+      }
       // 调整用户信息获取
       let user = yield select((state) => state.common.user);
       if (user.openid) {
