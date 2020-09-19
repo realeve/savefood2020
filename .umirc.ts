@@ -23,7 +23,7 @@ const config: IConfig = {
       {
         dva: true,
         dynamicImport: { webpackChunkName: true },
-        title: '成钞物业公司早餐食材发放系统',
+        title: '光盘行动从我做起',
         dll: false,
         routes: {
           exclude: [
