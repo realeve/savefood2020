@@ -17,10 +17,15 @@
     top: 0;
   }
 
-  .content {
-    height: 100%;
+  .container {
+    height: 720px;
     position: relative;
+    overflow: hidden;
+  }
+
+  .content {
     padding: 20px;
+    transition: transform 0.5s;
   }
 
   @font-face {
@@ -35,8 +40,8 @@
   }
 
   .item {
-    margin-bottom: 20px;
-
+    padding-bottom: 20px;
+    height: 100px;
     .title {
       .slogan;
       font-size: 20px;
@@ -57,9 +62,8 @@
       font-family: '方正小标宋简体';
       font-size: 26px;
     }
-    .user{
-      color:#fff;
-      text-align: right;
+    .user {
+      color: #fff;
     }
     &:nth-child(odd) {
       text-align: left;
@@ -77,7 +81,7 @@
   .footer {
     background: #f1cc01;
     color: #3246bc;
-    width: 60%; 
+    width: 60%;
     position: absolute;
     bottom: 5px;
     padding: 5px;

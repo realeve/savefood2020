@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './comment.less';
 import 'animate.css';
 import classnames from 'classnames';
+import { useInterval, useBoolean } from 'react-use';
+import * as db from '@/utils/db';
 
 const CommentItem = ({ data = {}, idx = 0 }) => (
   <div
@@ -17,74 +19,66 @@ const CommentItem = ({ data = {}, idx = 0 }) => (
       <span>我承诺</span>
     </div>
     <div className={styles.comment}>{data.comment}</div>
-    <div className={styles.user}>
-        ———— {data.nickname}
-    </div>
+    <div className={styles.user}>———— {data.nickname}</div>
   </div>
 );
 
+const COMMENT_SIZE = 120;
+
 export default () => {
-  const comments = [
-    {
-      comment: '这里滚动显示用户评论,户评论',
-      img:
-        'http://thirdwx.qlogo.cn/mmopen/vi_32/WnbsIzp30vkf8OVicicMHv0JZSy70NWsBmD6TfLflm1UM0jiceLJExd7BtjldmY6BxDC9f9pqTkpe8ic46icBw3X00g/132',
-      nickname: '宾不厌诈',
-      id: 0,
+  let [comment, setComment] = useState([]);
+  let [maxId, setMaxId] = useState('0');
+
+  // 当前第几项评论
+  const [activeItem, setActiveItem] = useState(0);
+
+  const [isRunning, toggleIsRunning] = useBoolean(true);
+
+  const [endNum, setEndNum] = useState(1);
+
+  useInterval(
+    () => {
+      setActiveItem(activeItem + 1);
+      if (activeItem === endNum) {
+        toggleIsRunning();
+      }
     },
-    {
-      comment: '敬畏粮食 尊重劳动',
-      img:
-        'http://wx.qlogo.cn/mmhead/Q3auHgzwzM7RSAYiaxiaC1lOZYicWic9YZKEFJ2TKEfh3pFJibLvf7IxdLQ/0',
-      nickname: '宋丽',
-      id: 1,
-    },
-    {
-      comment: '敬畏粮食 尊重劳动',
-      img:
-        'http://wx.qlogo.cn/mmhead/Q3auHgzwzM7RSAYiaxiaC1lOZYicWic9YZKEFJ2TKEfh3pFJibLvf7IxdLQ/0',
-      nickname: '宋丽',
-      id: 2,
-    },
-    {
-      comment: '敬畏粮食 尊重劳动',
-      img:
-        'http://wx.qlogo.cn/mmhead/Q3auHgzwzM7RSAYiaxiaC1lOZYicWic9YZKEFJ2TKEfh3pFJibLvf7IxdLQ/0',
-      nickname: '宋丽',
-      id: 3,
-    },
-    {
-      comment: '敬畏粮食 尊重劳动',
-      img:
-        'http://wx.qlogo.cn/mmhead/Q3auHgzwzM7RSAYiaxiaC1lOZYicWic9YZKEFJ2TKEfh3pFJibLvf7IxdLQ/0',
-      nickname: '宋丽',
-      id: 4,
-    },
-    {
-      comment: '敬畏粮食 尊重劳动',
-      img:
-        'http://wx.qlogo.cn/mmhead/Q3auHgzwzM7RSAYiaxiaC1lOZYicWic9YZKEFJ2TKEfh3pFJibLvf7IxdLQ/0',
-      nickname: '宋丽',
-      id: 5,
-    },
-    {
-      comment: '敬畏粮食 尊重劳动',
-      img:
-        'http://wx.qlogo.cn/mmhead/Q3auHgzwzM7RSAYiaxiaC1lOZYicWic9YZKEFJ2TKEfh3pFJibLvf7IxdLQ/0',
-      nickname: '宋丽',
-      id: 6,
-    },
-  ];
+    isRunning ? 3000 : null,
+  );
+
+  useEffect(() => {
+    db.getCbpcSavefood2020(maxId).then((res) => {
+      if (res.rows === 0) {
+        return;
+      }
+
+      let lastItem = res.data[res.rows - 1];
+      setMaxId(lastItem.id);
+
+      let nextComment = [...comment, ...res.data];
+      setComment(nextComment);
+
+      if (nextComment.length <= 6) {
+        setEndNum(0);
+      } else {
+        setEndNum(nextComment.length - 7);
+      }
+    });
+  }, []);
+
   return (
     <div className={styles.wrap}>
-      <div className={styles.content}>
-        {comments.map((item, idx) => (
-          <CommentItem data={item} idx={idx % 2} key={item.id} />
-        ))}
+      <div className={styles.container}>
+        <div
+          className={styles.content}
+          style={{ transform: `translateY(-${COMMENT_SIZE * activeItem}px)` }}
+        >
+          {comment.map((item, idx) => (
+            <CommentItem data={item} idx={idx % 2} key={item.id} />
+          ))}
+        </div>
       </div>
-      <div className={styles.footer}>
-          成都印钞有限公司
-      </div>
+      <div className={styles.footer}>成都印钞有限公司</div>
     </div>
   );
 };
