@@ -17,6 +17,9 @@ const CommentItem = ({ data = {}, idx = 0 }) => (
       <span>我承诺</span>
     </div>
     <div className={styles.comment}>{data.comment}</div>
+    <div className={styles.user}>
+        ———— {data.nickname}
+    </div>
   </div>
 );
 
