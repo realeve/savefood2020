@@ -1,5 +1,5 @@
 .wrap {
-  background: url('//www.cbpc.ltd/public/topic/202009/img/01.jpg');
+  background: url('//www.cbpc.ltd/public/topic/202009/img/main.jpg');
   background-size: cover;
   flex: 1;
   box-shadow: 1px 1px 3px 4px rgba(43, 62, 73, 0.6);
@@ -9,15 +9,48 @@
   &::before {
     content: '';
     width: 100%;
-    height: 50%;
-    background: #0071b7;
+    height: 100%;
+    background: rgba(18, 32, 192, 0.58);
     position: absolute;
     left: 0;
     top: 0;
   }
+
   .content {
-    width: 100%;
     height: 100%;
     position: relative;
+    padding: 20px;
+  }
+
+  @font-face {
+    font-family: 'genyomintw';
+    src: url('//www.cbpc.ltd/public/topic/202009/fonts/font.ttf');
+    font-style: normal;
+    font-weight: normal;
+  }
+  .slogan {
+    font-family: 'genyomintw';
+    font-weight: bold;
+  }
+
+  .item {
+    margin-bottom: 40px;
+    .title {
+      .slogan;
+      font-size: 26px;
+      margin-bottom: 8px;
+      color: #f1cc01;
+    }
+    .comment {
+      color: #fff;
+      font-family: '方正小标宋简体';
+      font-size: 32px;
+    }
+    &:nth-child(odd){
+        text-align: left;
+    }
+    &:nth-child(even){
+        text-align: right;
+    }
   }
 }
