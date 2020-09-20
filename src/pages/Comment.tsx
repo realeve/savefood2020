@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './comment.less';
 import 'animate.css';
 import classnames from 'classnames';
-import { useInterval, useBoolean } from 'react-use';
+import { useInterval } from 'react-use';
 import * as db from '@/utils/db';
 
 const CommentItem = ({ data = {}, idx = 0 }) => (
@@ -27,44 +27,41 @@ const COMMENT_SIZE = 120;
 
 export default () => {
   let [comment, setComment] = useState([]);
-  let [maxId, setMaxId] = useState('0');
 
   // 当前第几项评论
   const [activeItem, setActiveItem] = useState(0);
-
-  const [isRunning, toggleIsRunning] = useBoolean(true);
 
   const [endNum, setEndNum] = useState(1);
 
   useInterval(
     () => {
       setActiveItem(activeItem + 1);
-      if (activeItem === endNum) {
-        toggleIsRunning();
-      }
     },
-    isRunning ? 3000 : null,
+    endNum > activeItem ? 2000 : null,
   );
 
-  useEffect(() => {
-    db.getCbpcSavefood2020(maxId).then((res) => {
-      if (res.rows === 0) {
-        return;
-      }
+  const handleComments = (res) => {
+    if (res.rows === 0) {
+      return;
+    }
 
-      let lastItem = res.data[res.rows - 1];
-      setMaxId(lastItem.id);
+    let nextComment = [...comment, ...res.data];
+    setComment(nextComment);
 
-      let nextComment = [...comment, ...res.data];
-      setComment(nextComment);
+    let end = nextComment.length <= 6 ? 0 : nextComment.length - 6;
 
-      if (nextComment.length <= 6) {
-        setEndNum(0);
-      } else {
-        setEndNum(nextComment.length - 7);
-      }
-    });
-  }, []);
+    setEndNum(end);
+  };
+
+  const refresh = () => {
+    let maxId = comment.length === 0 ? 0 : comment[comment.length - 1].id;
+    db.getCbpcSavefood2020(maxId).then(handleComments);
+  };
+
+  useEffect(refresh, []);
+
+  // 每5秒更新一次
+  useInterval(refresh, 5000);
 
   return (
     <div className={styles.wrap}>
