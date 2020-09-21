@@ -23,7 +23,9 @@ const CommentItem = ({ data = {}, idx = 0 }) => (
   </div>
 );
 
-const COMMENT_SIZE = 120;
+const isPC = window.innerHeight / window.innerWidth < 1.2;
+
+const COMMENT_SIZE = isPC ? 120 : 114;
 
 export default () => {
   let [comment, setComment] = useState([]);
@@ -64,7 +66,11 @@ export default () => {
   useInterval(refresh, 5000);
 
   return (
-    <div className={styles.wrap}>
+    <div
+      className={classnames('section', styles.wrap, {
+        [styles.mobile]: !isPC,
+      })}
+    >
       <div className={styles.container}>
         <div
           className={styles.content}
@@ -75,7 +81,7 @@ export default () => {
           ))}
         </div>
       </div>
-      <div className={styles.footer}>成都印钞有限公司</div>
+      {isPC && <div className={styles.footer}>成都印钞有限公司</div>}
     </div>
   );
 };

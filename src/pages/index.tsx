@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styles from './index.less';
 import { connect } from 'dva';
 import ReactFullpage from '@fullpage/react-fullpage';
 import classnames from 'classnames';
 import 'animate.css';
 import { TextareaItem, Button, Toast } from 'antd-mobile';
-
+import Comment from './Comment';
 import * as db from '@/utils/db';
 
 const slogans = [
@@ -32,6 +32,14 @@ const Fullpage = ({ user }) => {
       setComment('');
     }
   };
+
+  const ref = useRef(null);
+  const [inited, setInited] = useState(false);
+  const play = () => {
+    if (inited) return;
+    ref?.current?.play();
+    setInited(true);
+  };
   return (
     <>
       <ReactFullpage
@@ -43,7 +51,7 @@ const Fullpage = ({ user }) => {
         render={() => {
           return (
             <ReactFullpage.Wrapper>
-              <div className={classnames(styles.page, 'section')}>
+              <div className={classnames(styles.page, 'section')} onClick={play}>
                 <img src="./img/01.jpg" alt="封面" />
                 <div
                   style={{
@@ -155,6 +163,7 @@ const Fullpage = ({ user }) => {
                   </div>
                 </div>
               </div>
+              <Comment />
             </ReactFullpage.Wrapper>
           );
         }}
@@ -167,8 +176,24 @@ const Fullpage = ({ user }) => {
           position: 'fixed',
           bottom: 20,
           left: 'calc(50% - 14px)',
+          transform: `rotate(${page == 13 ? 18 : ''}0deg)`,
+          transition: 'transform 0.5s',
         }}
       />
+      <img
+        src="./img/player.png"
+        alt=""
+        style={{
+          width: 26,
+          height: 26,
+          position: 'fixed',
+          top: 10,
+          right: 10,
+        }}
+        className={classnames({ [styles.rotate]: inited })}
+        onClick={play}
+      />
+      <audio src="//www.cbpc.ltd/public/topic/202009/bgm.mp3" autoPlay loop ref={ref} />
     </>
   );
 };
