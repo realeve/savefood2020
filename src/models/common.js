@@ -38,7 +38,7 @@ export default {
   },
   subscriptions: {
     async setup({ dispatch, history }) {
-      if(window.location.href.includes('#config')){
+      if(window.location.href.includes('config')){
         return;
       }
       // 不获取个人信息
