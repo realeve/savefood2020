@@ -45,3 +45,17 @@ export const getCbpcSavefood2020: (_id: string) => Promise<IAxiosState> = (_id =
       _id,
     },
   });
+
+/**
+*   @database: { 微信开发 }
+*   @desc:     { 删除留言 } 
+	以下参数在建立过程中与系统保留字段冲突，已自动替换:
+	@id:_id. 参数说明：api 索引序号
+    */
+export const delCbpcSavefood2020: (_id: string) => Promise<boolean> = (_id) =>
+  axios({
+    url: '/351/459db4d0ba.json',
+    params: {
+      _id,
+    },
+  }).then((res) => res.rows > 0 && res.data[0].affected_rows > 0);

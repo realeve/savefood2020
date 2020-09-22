@@ -1,0 +1,52 @@
+.wrap {
+  background: url('//www.cbpc.ltd/public/topic/202009/img/main.jpg');
+  background-size: cover;
+  flex: 1;
+  box-shadow: 1px 1px 3px 4px rgba(43, 62, 73, 0.6);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  &::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    background: rgba(18, 32, 192, 0.58);
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  .container {
+    position: relative; 
+  }
+
+  .content {
+    padding: 20px; 
+  }
+
+  .comment { 
+    color: #fff;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    .comment {
+      font-size: 16px;
+    }
+    .user {
+      color: #fff;
+    }
+    &:nth-child(odd) {
+      text-align: left;
+      .title {
+        justify-content: flex-start;
+      }
+    }
+    &:nth-child(even) {
+      text-align: right;
+      .title {
+        justify-content: flex-end;
+      }
+    }
+  }
+}
