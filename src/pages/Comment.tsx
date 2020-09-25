@@ -43,15 +43,19 @@ export default () => {
   );
 
   const handleComments = (res) => {
+    let nextComment = [];
     if (res.rows === 0) {
-      return;
+      // 随机选择一项
+      let id = comment[comment.length - 1].id;
+      let idx = Math.floor(Math.random() * comment.length);
+      nextComment = [...comment, { ...comment[idx], id }];
+      setComment(nextComment);
+    } else {
+      nextComment = [...comment, ...res.data];
+      setComment(nextComment);
     }
 
-    let nextComment = [...comment, ...res.data];
-    setComment(nextComment);
-
-    let end = nextComment.length <= 6 ? 0 : nextComment.length - 6;
-
+    let end = nextComment.length <= 6 ? 0 : nextComment.length - 6; 
     setEndNum(end);
   };
 
@@ -77,7 +81,7 @@ export default () => {
           style={{ transform: `translateY(-${COMMENT_SIZE * activeItem}px)` }}
         >
           {comment.map((item, idx) => (
-            <CommentItem data={item} idx={idx % 2} key={item.id} />
+            <CommentItem data={item} idx={idx % 2} key={idx} />
           ))}
         </div>
       </div>
